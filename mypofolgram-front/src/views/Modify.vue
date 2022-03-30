@@ -34,7 +34,7 @@
 
 <script>
 export default {
-    props:["user"],
+    // props:["user"],
 
     data() {
         return {
@@ -42,6 +42,7 @@ export default {
             nickname: "",
             website: "",
             intro: "",
+            user:{}
         };
     },
 
@@ -49,8 +50,9 @@ export default {
         // 저장된 정보들 가져와서 data에 넣기
 
         // props 테스트
-        console.log(typeof(this.user));
-        // console.log(JSON.stringify(this.user));
+        this.user = this.$route.params;
+        console.log(JSON.stringify(this.user));
+
     },
 
     methods: {
