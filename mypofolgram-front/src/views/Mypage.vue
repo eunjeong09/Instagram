@@ -104,7 +104,7 @@ export default {
         // follower/following Count vuex로 얻기?
 
         // props 테스트
-        this.test = {'id':1, 'name': 'eunjeong'};
+        this.test = {id:1, name: 'eunjeong'};
     },
 
     methods: {
