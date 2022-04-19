@@ -9,6 +9,7 @@
 <script>
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
+import { mapActions } from 'vuex'
 
 export default {
     name: "App",
@@ -16,18 +17,23 @@ export default {
         Header,
         Footer,
     },
-
+    created() {
+        this.getUserInfo()
+    },
     computed:{
         showHeader(){
-            let hidePaths = ["/mypage", "/activity"];
+            let hidePaths = ["/mypage", "/activity", "/comment"];
             hidePaths = hidePaths.filter((e) => this.$route.path.startsWith(e));
             return hidePaths.length ===0;
         },
         showFooter(){
-            let hidePaths = ["/mypage/modify"];
+            let hidePaths = ["/mypage/modify", "/comment"];
             hidePaths = hidePaths.filter((e) => this.$route.path.startsWith(e));
             return hidePaths.length ===0;
         }
+    },
+    methods : {
+        ...mapActions('userInfo', ['getUserInfo'])
     }
 };
 </script>

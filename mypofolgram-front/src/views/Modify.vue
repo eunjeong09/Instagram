@@ -10,56 +10,74 @@
             <p class="point">프로필 사진 바꾸기</p>
         </div>
         <ul class="modifyList">
-            <li>
-                <span>이름</span>
-                <input type="text" placeholder="이름" v-model="name" @click="modifyProfile" id="name" />
-            </li>
+            <keep-alive>
+                <li>
+                    <span>이름</span>
+                    <input type="text" placeholder="이름" v-model="user.userId" id="name" @click="modifyProfile" />
+                </li>
+            </keep-alive>
             <li>
                 <span>사용자 이름</span>
-                <input type="text" placeholder="사용자 이름" v-model="nickname" @click="modifyProfile" id="nickname" />
+                <input type="text" placeholder="사용자 이름" v-model="user.userName" id="nickname" @click="modifyProfile"/>
             </li>
             <li>
                 <span>웹사이트</span>
-                <input type="text" placeholder="웹사이트" v-model="website" />
+                <input type="text" placeholder="웹사이트" v-model="user.website" />
             </li>
             <li>
                 <span>소개</span>
-                <input type="text" placeholder="소개" v-model="intro" @click="modifyProfile" id="intro" />
+                <input type="text" placeholder="소개" v-model="user.introduction" id="intro" @click="modifyProfile"/>
             </li>
         </ul>
         <p class="point">프로페셔널 계정으로 전환</p>
         <p class="point">개인정보 설정</p>
+      <ModifyProfile
+          :user="user"
+          :type="viewPage"
+      ></ModifyProfile>
     </div>
 </template>
 
 <script>
-export default {
-    // props:["user"],
+import ModifyProfile from "./ModifyProfile"
+import { mapGetters } from 'vuex'
 
+export default {
+    components : {
+      ModifyProfile
+    },
     data() {
         return {
-            name: "",
-            nickname: "",
+            userId: "",
+            userName: "",
             website: "",
-            intro: "",
-            user:{}
+            introduction: "",
+            viewPage : "",
+            user : {},
+            show : false
         };
     },
-
-    mounted() {
+    created() {
         // 저장된 정보들 가져와서 data에 넣기
-
-        // props 테스트
-        this.user = this.$route.params;
-        console.log(JSON.stringify(this.user));
-
+      this.user = this.getterUserInfo
     },
-
+    computed : {
+        ...mapGetters('userInfo', ['getterUserInfo']),
+    },
     methods: {
         modifyProfile(e) {
             let id = e.target.id;
             console.log("id : " + id);
-            this.$router.push({ name: "modifyProfile", params: { type: id } });
+            this.$router.push({
+                name: "modifyProfile",
+                params: {
+                    userId : this.user.userId,
+                    userName : this.user.userName,
+                    introduction : this.user.introduction,
+                    type: id
+                }
+            });
+            this.show = true
         },
     },
 };
