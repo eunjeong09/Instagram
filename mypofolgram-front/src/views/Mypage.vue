@@ -28,8 +28,8 @@
         <div class="modify" @click="this.$router.push({ name: 'modify'})">프로필 편집</div>
 
         <div class="mypost" v-if="!isEmpty">
-            <div class="post">
-                <img src="/images/example.jpeg" alt="고양이" />
+            <div v-for="(localPost) in localPosts" v-bind:key="localPost" class="post">
+                <img :src="localPost.imgUrl" alt="고양이" />
             </div>
             
         </div>
@@ -188,7 +188,7 @@ export default {
     created() {
         this.user = this.getterUserInfo
         // this.getFollowList()
-        // this.getPostList()
+        this.getPostList()
     },
     computed : {
         ...mapGetters('userInfo', ['getterUserInfo']),
