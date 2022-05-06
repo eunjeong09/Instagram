@@ -41,7 +41,7 @@
         <div class="post" v-for="(row, index) in rows" v-bind:key="row">
             <div class="top">
                 <img :src="row.userImgUrl" alt="프로필" />
-                <p>{{ row.nickName }}</p>
+                <p style="cursor: pointer;">{{ row.nickName }}</p>
                 <i class="fa-solid fa-ellipsis" @click="this.showModal = true;"></i>
             </div>
             <div class="photoList">
@@ -82,8 +82,8 @@
             </div>
             <div class="commentArea">
                 <i class="fa-solid fa-face-smile-wink"></i>
-                <input type="text" placeholder="댓글 달기..." />
-                <div class="button">게시</div>
+                <input type="text" placeholder="댓글 달기..." id="comment"/>
+                <div class="button" @click="createComment(row.id,$event)">게시</div>
             </div>
         </div>
 
@@ -268,6 +268,17 @@ export default {
         calculateDate(date) {
             return common.getDate(date);
         },
+        createComment(id,e){
+            // API필요 - 파라미터(게시글 ID, 댓글)
+            // 댓글내용
+            let target = e.currentTarget;
+            let commentInput = target.previousSibling;
+            let comment = commentInput.value;
+            console.log(comment);
+
+            // api완료 시 입력창 지우는 기능 필요
+            commentInput.value = "";
+        }
     },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="mypage">
         <div class="mypageHeader">
-            <h2 class="nickname" v-text="user.userId"></h2>
+            <h2 class="nickname" v-text="getterUserInfo.userId"></h2>
             <dis class="right">
                 <i class="fa-solid fa-square-plus" id="createModal" @click="checkModal($event)"></i>
                 <i class="fa-solid fa-bars" id="settingModal" @click="checkModal($event)"></i>
@@ -9,29 +9,30 @@
         </div>
         <div class="top">
             <div>
-                <img :src=imgTest alt="고양이" />
+                <img :src=getterUserInfo.userImgUrl alt="" />
             </div>
             <div>
                 <p>게시물</p>
-                <span v-text="user.postCnt"></span>
+                <span v-text="getterUserInfo.postCnt"></span>
             </div>
-            <div @click="gotoFollowWhen('follower', user.followerCnt > 0)">
+            <div @click="gotoFollowWhen('follower', follow.followerCount > 0)">
                 <p>팔로워</p>
-                <span v-text="user.followerCnt"></span>
+                <span v-text="follow.followerCount"></span>
             </div>
-            <div @click="gotoFollowWhen('following', user.followeeCnt > 0)">
+            <div @click="gotoFollowWhen('following', follow.followingCount > 0)">
                 <p>팔로잉</p>
-                <span v-text="user.followeeCnt"></span>
+                <span v-text="follow.followingCount"></span>
             </div>
         </div>
         <!-- <div class="modify" @click="moveTo('/mypage/modify')">프로필 편집</div> -->
         <div class="modify" @click="this.$router.push({ name: 'modify'})">프로필 편집</div>
 
         <div class="mypost" v-if="!isEmpty">
-            <div v-for="(localPost) in localPosts" v-bind:key="localPost" class="post">
-                <img :src="localPost.imgUrl" alt="고양이" />
+            <div v-for="(post) in localPosts" class="post" v-bind:key="post">
+            <!-- <div class="post"> -->
+                <img :src=post.imgUrl alt="" @click="test"/>
             </div>
-            
+
         </div>
         <div v-else class="empty">
             <div>
@@ -71,6 +72,10 @@
         </div>
         <div v-if="settingModal" class="bottomModal">
             <ul>
+                <li @click="checkLogout">
+                    <i class="fa-solid fa-gear"></i>
+                    <p>로그아웃</p>
+                </li>
                 <li>
                     <i class="fa-solid fa-gear"></i>
                     <p>설정</p>
@@ -139,7 +144,7 @@
             </template>
             <template #footer>
                 <div>
-                    
+
                 </div>
             </template>
         </confirm-modal>
@@ -150,14 +155,15 @@
 
 import modal from '../components/modal.vue'
 import confirmModal from '../components/confirmModal.vue'
-import axios from 'axios'
-import { mapGetters, mapActions } from 'vuex'
+// import axios from 'axios'
+import http from '../utils/http'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
     components : {
         'newPost' : modal,
         'confirmModal' : confirmModal
-    },        
+    },
     data() {
 
         return {
@@ -165,53 +171,51 @@ export default {
             createModal: false,
             settingModal: false,
             user: {},
-            // user: {
-            //     followerCount: 1,
-            //     followingCount: 1,
-            // },
+            userId : '',
+            follow: {
+                followerCount: 0,
+                followingCount: 0,
+                followeeList : [],
+                followerList : []
+            },
             // props 테스트
-            test: "",
-
-            imgTest : "/images/example.jpeg",
             showRegister: false,
             showDeveloping : false,
             selectedFile: null,
             showComplete : false,
-            follow : {
-                followCnt : [],
-                followeeList : [],
-                followerList : []
-            },
             localPosts : []
         };
     },
     created() {
-        this.user = this.getterUserInfo
-        // this.getFollowList()
+        this.userId = sessionStorage.getItem('userId');
+        this.setUserId(this.userId)
+        this.getUserInfo()
+        this.getFollowList()
         this.getPostList()
     },
     computed : {
         ...mapGetters('userInfo', ['getterUserInfo']),
     },
     watch: {
-    }, 
+    },
     mounted() {
         // follower/following Count vuex로 얻기?
     },
     methods: {
+        ...mapMutations('userInfo', ['setUserId']),
         ...mapActions('userInfo', ['getUserInfo']),
-        // async getFollowList() {
-        //     console.log('befroe follow list axios is ')
-        //     console.log(this.user.userId)
-        //     await axios.get('/user/getFollowList', {params : {userId : this.user.userId}})
-        //         .then((response) => {
-        //             this.follow = response.data.result
-        //             console.log('this follow after gettingfollowList is ')
-        //             console.log(this.follow)
-        //         })
-        // },
+        ...mapActions('auth', ['logout']),
+        async getFollowList() {
+            await http.get('/api/user/getFollowList', {params : {userId : this.userId}})
+                .then((response)=> {
+                    this.follow.followerCount = response.data.result.followCnt[0];
+                    this.follow.followingCount = response.data.result.followCnt[1];
+                    this.follow.followeeList = response.data.result.followeeList;
+                    this.follow.followerList = response.data.result.followerList;
+                })
+        },
         async getPostList() {
-            await axios.get("/post/getPostList", {params : {userId : this.user.userId}})
+            await http.get("/api/post/getPostList", {params : {userId : this.userId}})
             .then((response) => {
                 this.localPosts = response.data.result
             })
@@ -226,18 +230,15 @@ export default {
             this.$router.push({ path: `/mypage/follow/${menu}` });
         },
         onFileSelected(event) {
-            console.log(event)
             this.selectedFile = event.target.files[0]
         },
         async onUpload() {
             const fd = new FormData()
             let isCheck = this.checkFile(fd)
-            console.log('check is :'+isCheck)
             if(!isCheck) return
-            console.log('stil??')
             fd.append('imageTest', this.selectedFile, this.selectedFile.name)
 
-            await axios.post('', fd, {
+            await http.post('', fd, {
                 onUploadProgress : uploadEvent => {
                     console.log('Upload Progress : '+ Math.round(uploadEvent.loaded / uploadEvent.total * 100) + '%') //hold number and byte how much we upload
                 }
@@ -265,8 +266,15 @@ export default {
                 this.createModal = false;
                 this.settingModal = !this.settingModal;
             }
-            
-
+        },
+        checkLogout() {
+            this.logout()
+            this.$router.push({
+                path : '/login'
+            })
+        },
+        test() {
+            alert("Test")
         }
     },
 };

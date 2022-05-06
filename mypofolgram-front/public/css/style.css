@@ -50,6 +50,9 @@ i{
     color: #333;
     cursor: pointer;
 }
+::-webkit-scrollbar {
+    display: none;
+}
 
 /* common */
 .flexbox{
@@ -215,6 +218,7 @@ i{
 }
 .logo {
     display: inline-block;
+    cursor: pointer;
 }
 .logo img {
     width: 100px;
@@ -234,6 +238,7 @@ i{
     height: 24px;
     border-radius: 50%;
     margin-left: 15px;
+    cursor: pointer;
 }
 .iconList .plusWrap{
     position: relative;
@@ -359,6 +364,7 @@ i{
     border-radius: 50%;
     margin: 0 auto;
     display: block;
+    cursor: pointer;
 }
 .storyList .story p {
     font-size: 14px;
@@ -367,6 +373,15 @@ i{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* StoryView */
+.storyView{
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 /* PostList */
@@ -382,6 +397,7 @@ i{
     height: 42px;
     border-radius: 50%;
     margin-right: 10px;
+    cursor: pointer;
 }
 .post .top i {
     float: right;
@@ -415,6 +431,7 @@ i{
 .post .comment {
     color: #8e8e8e;
     margin: 3px 0px;
+    cursor: pointer;
 }
 .post .time {
     color: #8e8e8e;
@@ -554,8 +571,8 @@ i{
     display: flex;
 }
 .mypage .top img {
-    width: 77px;
-    height: 77px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
 }
 .mypage .modify {
@@ -581,6 +598,7 @@ i{
 .mypage .post img {
     width: 100%;
     height: 100%;
+    cursor: pointer;
 }
 
 /* Follow */
@@ -701,6 +719,39 @@ i{
     }
 }
 
+/* login */
+.login{
+    position: relative;
+    text-align: center;
+    height: 100vh;
+}
+.login .logo {
+    display: inline-block;
+    align-items: baseline;
+    padding: 10px 20px;
+    justify-content: space-between;
+    
+}
+.login .logo img {
+    width: 250px;
+    display: flex;
+    align-items: center;
+}
+.login .formInput {
+    background-color: #f2f2f2;
+    border: solid;
+    border-color: #dbdbdb;
+    margin-bottom: 2vh;
+    width: 40vh;
+    height: 4vh;
+}
+.login div {
+    margin: 0;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 /* modal jh.won */
 .modal-mask {
     position: fixed;
@@ -752,8 +803,8 @@ i{
   }
   .modal-body {
     text-align: center;
-    margin: 20px 0;
-    margin-top: 200px;
+    position: relative;
+    padding-top: 200px;
   }
   .modal-footer {
     text-align: center;

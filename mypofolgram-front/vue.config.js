@@ -1,5 +1,6 @@
 module.exports = {
-  outputDir: "../../MyPofolgram-back/src/main/resources/static/",
+  // publicPath : 'https://github.com/junjunwon/MyPofolgram.git',
+  // outputDir: "docs",
   indexPath: "../static/index.html",
   lintOnSave: false,
   css: {
@@ -16,13 +17,14 @@ module.exports = {
   },
   devServer: {
     proxy: {
-      '/': {
+      '/api': {
         target: 'http://localhost:8080',
+        // target : 'https://myportfoliogram.herokuapp.com/',
         ws: true,
         changeOrigin: true
       }
     },
-    disableHostCheck: true,
+    // disableHostCheck: true,
     port: 8079
   }
 }
