@@ -915,10 +915,10 @@ a.button {
     .commentArea input{
         font-size: 14px;
     }
-    .mypage .top{
+    .mypage .myTop{
         font-size: 14px;
     }
-    .mypage .top img {
+    .mypage .myTop img {
         width: 100px;
         height: 100px;
         border-radius: 50%;
