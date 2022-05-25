@@ -111,6 +111,12 @@ export default {
             uploadImageIndex: 0, // 이미지 업로드를 위한 변수
             content: "",
             showUploadModal2: false,
+            multipartFiles : '',
+
+            postDetailDto : {
+                userInfo : '',
+                content : ''
+            }
         };
     },
     methods: {
@@ -141,6 +147,7 @@ export default {
         uploadImage() {
             let num = -1;
             for (let i = 0; i < this.$refs.fileInput.files.length; i++) {
+                // this.multipartFiles[i] = this.$refs.fileInput.files[i]
                 this.files = [
                     ...this.files,
                     //이미지 업로드
@@ -163,17 +170,23 @@ export default {
         addContent() {
             this.showUploadModal2 = false;
         },
-        upload() {
+        async upload() {
             // API 호출
             // !!준호님 모달을 닫으면 파일/내용 정보가 사라져서, api 통신 완료된 후에 close함수 호출해주심 될듯해용
             // 이미지 - this.files
             // 내용 - this.content
-            http.post('/api/post/savePost', {
-                userInfo : this.getterUserInfo,
-                photoImgUrl : this.files,
-                content : this.content
+            // this.multipartFiles = this.files.map(file => file.file)
+            this.multipartFiles = this.files[0].file
+            this.postDetailDto.userId = this.getterUserInfo.id
+            this.postDetailDto.content = this.content
+            console.log("this.multipartFiles")
+            console.log(this.multipartFiles)
+            debugger
+            await http.post('/api/post/savePost', {
+                multipartFiles : this.multipartFiles,
+                postDetailDto : this.postDetailDto
             }, {
-                headers: {'Content-Type': 'multipart/form-data'}
+                headers: {"content-type": "multipart/form-data"}
             })
             .then((response) => {
                 if(response.data.result === true) {
