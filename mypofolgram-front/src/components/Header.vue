@@ -87,7 +87,7 @@
 <script>
 import modal from "./modal.vue";
 // import axios from 'axios'
-import http from '../utils/http'
+import http from '../utils/http';
 import { mapGetters } from "vuex";
 
 export default {
