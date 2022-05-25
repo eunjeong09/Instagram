@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export default{
+export default {
     getDate(str) {
         const nowDate = moment().valueOf();
         const date = moment(str).valueOf();
