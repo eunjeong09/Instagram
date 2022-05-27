@@ -3,7 +3,7 @@
         <!-- MypostList body -->
         <TitleHeader></TitleHeader>
         <!-- header component -->
-        <PostList v-bind:mypostUserId="userId"></PostList>
+        <PostList v-bind:isMypage="true"></PostList>
     </div>
 </template>
 
@@ -14,11 +14,7 @@ export default {
     name : 'MyPostList',
     data() { 
         return {
-            userId : ''
         }
-    },
-    mounted() {
-        this.userId = sessionStorage.getItem("userId");
     },
     components : {
         PostList,

@@ -88,7 +88,7 @@ export default {
         VueperSlides, 
         VueperSlide
     },
-    props : ['mypostUserId'],
+    props : ['isMypage'],
     data() {
         return {
             userId : '',
@@ -146,11 +146,15 @@ export default {
             });
         },
         async getPostInfo() {
-            this.userId = this.mypostUserId
-            console.log("this.userId", this.userId)
-            console.log("this.mypostUserId", this.mypostUserId)
             
-            await http.get("/api/post/getPostListDetail", { params: { userId: "admin" } }).then((response) => {
+            await http.get("/api/post/getPostListDetail", 
+            { 
+                params: { 
+                    userId: this.getterUserInfo.userId,
+                    isMypage : this.isMypage
+                } 
+            }
+            ).then((response) => {
                 console.log(response);
                 this.localPostDetails = response.data.result;
                 this.count = this.localPostDetails.length
