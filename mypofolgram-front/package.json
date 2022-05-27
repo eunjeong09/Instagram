@@ -13,16 +13,17 @@
     "core-js": "^3.22.3",
     "moment": "^2.29.3",
     "vue": "^3.2.33",
+    "vue-cropperjs": "5.0.0",
     "vue-router": "^4.0.14",
     "vueperslides": "3.3.2",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.5.4",
     "@vue/cli-plugin-babel": "~5.0.4",
     "@vue/cli-plugin-eslint": "~5.0.4",
     "@vue/cli-service": "~5.0.4",
     "@vue/compiler-sfc": "^3.2.33",
-    "@babel/eslint-parser": "^7.5.4",
     "eslint": "^8.14.0",
     "eslint-plugin-vue": "^8.7.1"
   },
