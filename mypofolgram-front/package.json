@@ -16,7 +16,8 @@
     "vue-cropperjs": "5.0.0",
     "vue-router": "^4.0.14",
     "vueperslides": "3.3.2",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.5.4",
