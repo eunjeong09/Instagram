@@ -57,17 +57,30 @@
                 <br />
                 <div @click="$refs.fileInput.click()" class="buttonBackground">컴퓨터에서 선택</div>
             </div>
-            <div v-else-if="files.length !== 0 && this.showUploadModal2" class="imagesWrap uploadBody2">
-                <div v-bind:style='{ backgroundImage: `url("${files[0].preview}")` }'></div>
-                
+            <!-- <div v-else-if="files.length !== 0 && this.showUploadModal2" class="imagesWrap uploadBody2">
+                <div v-bind:style="{ backgroundImage: `url(&quot;${files[0].preview}&quot;)` }"></div>
+            </div> -->
+
+            <!-- 위에 백그라운드 이미지로 처한걸 img태그로 변겅 -> cropper.js 적용 -->
+            <div v-else-if="files.length !== 0 && this.showUploadModal2" class="imagesWrap uploadBody2" id="uploadBody2">
+                <!-- 이미지 업로드까지 확인 -->
+                <!-- <img id="cropperImage" src=""/> -->
+
+                <!-- cropper 적용 -->
+                <div class="flex">
+                    <div class="w-3/4 mr-4">
+                        <img ref="cropperImage" src="" class="hidden" id="cropperImage" alt="image-edit" />
+                    </div>
+                </div>
             </div>
+
             <div v-else class="uploadBody3">
                 <div class="leftArea">
                     <!-- <div v-for="(file, index) in files" :key="index">
                         <img :src="file.preview" />
                     </div> -->
                     <!-- 첫번째 이미지만 출력되도록 -->
-                    <div v-bind:style='{ backgroundImage: `url("${files[0].preview}")` }'></div>
+                    <div v-bind:style="{ backgroundImage: `url(&quot;${files[0].preview}&quot;)` }"></div>
                 </div>
                 <div class="rightArea">
                     <div>
@@ -87,8 +100,11 @@
 <script>
 import modal from "./modal.vue";
 // import axios from 'axios'
-import http from '../utils/http';
+import http from "../utils/http";
 import { mapGetters } from "vuex";
+// cropper
+import Cropper from "cropperjs";
+import "cropperjs/dist/cropper.css";
 
 export default {
     components: {
@@ -111,12 +127,15 @@ export default {
             uploadImageIndex: 0, // 이미지 업로드를 위한 변수
             content: "",
             showUploadModal2: false,
-            multipartFiles : [],
+            multipartFiles: [],
 
-            postDetailDto : {
-                userId : '',
-                content : ''
-            }
+            postDetailDto: {
+                userId: "",
+                content: "",
+            },
+            // cropper
+            cropperImage: {},
+            cropper: {},
         };
     },
     methods: {
@@ -147,7 +166,7 @@ export default {
         uploadImage() {
             let num = -1;
             for (let i = 0; i < this.$refs.fileInput.files.length; i++) {
-                this.multipartFiles[i] = this.$refs.fileInput.files[i]
+                this.multipartFiles[i] = this.$refs.fileInput.files[i];
                 this.files = [
                     ...this.files,
                     //이미지 업로드
@@ -165,33 +184,46 @@ export default {
             this.uploadImageIndex = num + 1; //이미지 index의 마지막 값 + 1 저장
             if (this.filesPreview.length !== 0) {
                 this.showUploadModal2 = true;
+
+                setTimeout(() => {
+                    this.createImageUrl();
+                }, 1000);
             }
+        },
+        createImageUrl() {
+            // null 문제 해결 필요
+            // let test = document.getElementById("cropperImage");
+            document.getElementById("cropperImage").src = this.files[0].preview;
+
+            this.image = this.$refs.cropperImage;
+            this.cropper = new Cropper(this.image, {
+                preview: ".preview",
+            });
         },
         addContent() {
             this.showUploadModal2 = false;
         },
         async upload() {
-            const form = new FormData()
-            this.postDetailDto.userId = this.getterUserInfo.id
-            this.postDetailDto.content = this.content
+            const form = new FormData();
+            this.postDetailDto.userId = this.getterUserInfo.id;
+            this.postDetailDto.content = this.content;
             this.multipartFiles.forEach((file) => {
-                form.append("multipartFiles", file)
-            })
-            form.append("postDetailDto", new Blob([JSON.stringify(this.postDetailDto)], {type : "application/json"}));
+                form.append("multipartFiles", file);
+            });
+            form.append("postDetailDto", new Blob([JSON.stringify(this.postDetailDto)], { type: "application/json" }));
 
-            await http.post('/api/post/savePost', form, 
-            {
-                headers: {"content-type": "multipart/form-data"}
-            })
-            .then((response) => {
-                if(response.data.result === true) {
-                    console.log(true)
-                } else {
-                    console.log(false)
-                }
-            })
-            .finally(this.close("showRegister"))
-            
+            await http
+                .post("/api/post/savePost", form, {
+                    headers: { "content-type": "multipart/form-data" },
+                })
+                .then((response) => {
+                    if (response.data.result === true) {
+                        console.log(true);
+                    } else {
+                        console.log(false);
+                    }
+                })
+                .finally(this.close("showRegister"));
         },
     },
 };
@@ -215,7 +247,7 @@ export default {
     left: 0;
     overflow: hidden;
 }
-.uploadBody2 > div{
+.uploadBody2 > div {
     width: 100%;
     height: 100%;
     background-position: center;
@@ -261,5 +293,9 @@ export default {
     height: 42px;
     border-radius: 50%;
     margin-right: 10px;
+}
+img {
+    display: block;
+    max-width: 100%; /* This rule is very important, please do not ignore this! */
 }
 </style>

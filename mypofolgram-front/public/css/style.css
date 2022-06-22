@@ -168,6 +168,9 @@ i {
     display: inline-block;
     margin-left: 10px;
 }
+.hidden{
+    display: none;
+}
 
 /* common-components */
 .empty {
