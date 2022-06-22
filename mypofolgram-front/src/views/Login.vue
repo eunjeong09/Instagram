@@ -1,7 +1,7 @@
 <template>
     <div class="login">
         <div>
-          <h1 class="logo">
+            <h1 class="logo">
                 <img src="/images/logo.png" alt="" />
             </h1>
             <p v-if="errors.length">
@@ -18,6 +18,7 @@
                     type="text"
                     name="userId"
                     placeholder="로그인 아이디"
+                    disabled
                 >
             </p>
             <p>
@@ -28,13 +29,7 @@
                 type="password"
                 name="password"
                 placeholder="비밀번호"
-                >
-            </p>
-            <p>
-                <input
-                class="button"
-                style="margin-bottom : 2vh; font-size:small; font-weight: bolder; cursor:pointer;"
-                value="비밀번호를 잊으셨나요?"
+                disabled
                 >
             </p>
             <p>
@@ -44,6 +39,9 @@
                 @click="checkLogin"
                 value="로그인"
                 >
+            </p>
+            <p class="animate-charcter">
+                로그인 버튼을 누르시면 마이포폴그램으로 이동합니다.
             </p>
         </div>
     </div>
@@ -57,8 +55,8 @@ export default {
     data() {
         return {
             errors: [],
-            userId: '',
-            password: ''
+            userId: 'admin',
+            password: 'admin'
         }
     },
     created() {
