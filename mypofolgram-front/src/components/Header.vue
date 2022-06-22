@@ -80,7 +80,10 @@
                         <img :src="file.preview" />
                     </div> -->
                     <!-- 첫번째 이미지만 출력되도록 -->
-                    <div v-bind:style="{ backgroundImage: `url(&quot;${files[0].preview}&quot;)` }"></div>
+                    <!-- <div v-bind:style="{ backgroundImage: `url(&quot;${files[0].preview}&quot;)` }"></div> -->
+
+                    <!-- cropper -->
+                    <img :src="cropped" alt="cropped image">
                 </div>
                 <div class="rightArea">
                     <div>
@@ -136,6 +139,7 @@ export default {
             // cropper
             cropperImage: {},
             cropper: {},
+            cropped:''
         };
     },
     methods: {
@@ -197,11 +201,28 @@ export default {
 
             this.image = this.$refs.cropperImage;
             this.cropper = new Cropper(this.image, {
+                dragMode: 'move',
+                aspectRatio: 16 / 9,
+                autoCropArea: 0.65,
+                restore: false,
+                guides: false,
+                center: false,
+                highlight: false,
+                cropBoxMovable: true,
+                cropBoxResizable: false,
+                toggleDragModeOnDblclick: false,
                 preview: ".preview",
+                crop: () => {
+                    const canvas = this.cropper.getCroppedCanvas();
+                    this.cropped = canvas.toDataURL('image/png');
+                },
             });
         },
         addContent() {
             this.showUploadModal2 = false;
+            // croppejs getData 필요
+            console.log(this.multipartFiles);
+            console.log(this.cropped);
         },
         async upload() {
             const form = new FormData();
