@@ -215,14 +215,24 @@ export default {
                 crop: () => {
                     const canvas = this.cropper.getCroppedCanvas();
                     this.cropped = canvas.toDataURL('image/png');
+                    console.log("여기 확인---");
+
+                    // 파일로 변환하는 방법 -> 적용필요
+                    // 파일 이름알기 
+                    let fileName = this.multipartFiles[0].name;
+                    this.cropper.getCroppedCanvas().toBlob((blob) => {
+                        const formData = new FormData();
+                        formData.append('croppedImage', blob, fileName , 0.7);
+
+                        for (var pair of formData.entries()) {
+                            console.log(pair[0]+ ', ' + pair[1]); 
+                        }
+                    });
                 },
             });
         },
         addContent() {
             this.showUploadModal2 = false;
-            // croppejs getData 필요
-            console.log(this.multipartFiles);
-            console.log(this.cropped);
         },
         async upload() {
             const form = new FormData();
