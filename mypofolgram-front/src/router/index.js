@@ -58,7 +58,7 @@ const routes = [
     {
         path: "/mypage/follow/:page",
         props : true,
-        component: () => import("../views/Follow.vue"),
+        component: () => import("../views/follow/Follow.vue"),
         beforeEnter: beforeAuth(true),
         meta: {
         }
@@ -67,7 +67,7 @@ const routes = [
         path: "/mypage/modify",
         name:"modify",
         props:true,
-        component: () => import("../views/Modify.vue"),
+        component: () => import("../views/modify/Modify.vue"),
         beforeEnter: beforeAuth(true),
         meta: {
         }
@@ -76,7 +76,7 @@ const routes = [
         path: "/mypage/modifyProfile",
         name:"modifyProfile",
         props:true,
-        component: () => import("../views/ModifyProfile.vue"),
+        component: () => import("../views/modify/ModifyProfile.vue"),
         beforeEnter: beforeAuth(true),
         meta: {
         }
