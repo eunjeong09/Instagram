@@ -13,6 +13,24 @@ $ npm run dev
 ## 백엔드 깃허브 주소
 https://github.com/junjunwon/MyPofolgram-back
 
+
+## 기술 스택
+#### 프론트엔드
+- Node.js : v17.8.0
+- @vue/cli : 4.5.15
+- vue : v2
+- Javascript ES6
+- CSS / HTML
+#### 백엔드
+- SringBoot : v2.6.4
+- Java : Java Open Jdk 11.0.2
+#### 데이터베이스
+- heroku-PostgreSql
+#### Cloud
+- Heroku : deploy Backend server
+- AWS S3 : storing images
+
+
 ## 협업방식
 1. 각자 브랜치를 생성해서 작업한다.
   - 브랜치의 명명규칙은 구글 스프레드시트 **task_num**을 바탕으로 한다. ex) git branch home-01
