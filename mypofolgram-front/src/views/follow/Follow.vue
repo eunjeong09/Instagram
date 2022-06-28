@@ -16,10 +16,10 @@
 
 <script>
 // import axios from "axios"
-import http from '../utils/http'
+import http from '../../utils/http'
 
-import Follower from "@/views/Follower.vue";
-import Following from "@/views/Following.vue";
+import Follower from "@/views/follow/Follower.vue";
+import Following from "@/views/follow/Following.vue";
 import { mapGetters } from 'vuex'
 export default{
     components:{
